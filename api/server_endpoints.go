@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/pterodactyl/wings/parser"
+	"go.uber.org/zap"
 )
 
 const (
@@ -64,6 +65,7 @@ func (r *PanelRequest) GetAllServerConfigurations() (map[string]*ServerConfigura
 	}
 
 	b, _ := r.ReadBody()
+	zap.S().Debug(string(b))
 	res := map[string]*ServerConfigurationResponse{}
 	if len(b) == 2 {
 		return res, nil, nil
@@ -205,9 +207,9 @@ func (r *PanelRequest) SendTransferSuccess(uuid string) (*RequestError, error) {
 }
 
 type BackupRequest struct {
-	Successful bool `json:"successful"`
+	Successful bool   `json:"successful"`
 	Sha256Hash string `json:"sha256_hash"`
-	FileSize int64 `json:"file_size"`
+	FileSize   int64  `json:"file_size"`
 }
 
 func (r *PanelRequest) SendBackupStatus(uuid string, backup string, data BackupRequest) (*RequestError, error) {
